@@ -2,9 +2,7 @@ FROM node:24-bookworm-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    npm install -g pnpm@10.26.1 \
-    && rm -rf /var/lib/apt/lists/*
+RUN npm install -g pnpm@10.26.1
 
 COPY package.json pnpm-lock.yaml ./
 
