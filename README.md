@@ -16,8 +16,22 @@
    ```
 
 2. **Zainstaluj przeglądarki Playwright**
+
    ```bash
    pnpm npx playwright install
+   ```
+
+3. **Skonfiguruj zmienne środowiskowe**
+
+   ```bash
+   cp .env.ci .env
+   cp .env.dist .env.keys
+   ```
+
+   > **Uwaga:** Plik `.env.keys` zawiera klucze szyfrowania. Musisz uzupełnić go poprawnym kluczem deszyfrującym, aby uruchomić aplikację lokalnie.
+
+   ```bash
+   pnpm dotenvx decrypt -f .env.ci
    ```
 
 ## 🧪 Uruchamianie testów

@@ -1,7 +1,5 @@
 import { fakerPL } from '@faker-js/faker';
 import { expect, type Page } from '@playwright/test';
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 export class RegisterPage {
   protected page: Page;
@@ -29,7 +27,7 @@ export class RegisterPage {
     this.address1 = fakerPL.location.streetAddress();
     this.address2 = fakerPL.location.secondaryAddress();
     this.city = fakerPL.location.city();
-    this.zone = fakerPL.helpers.arrayElement(['Dolnośląskie', 'Mazowieckie', 'Zachodniopomorskie']);
+    this.zone = fakerPL.helpers.arrayElement(['Dolnoslaskie', 'Mazowieckie', 'Zachodniopomorskie']);
     this.postcode = fakerPL.location.zipCode();
     await this.page.locator('#AccountFrm_address_1').fill(this.address1);
     await this.page.locator('#AccountFrm_address_2').fill(this.address2);
