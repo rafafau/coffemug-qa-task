@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Run Playwright tests in Docker
-        run: docker run --rm -v $(pwd)/playwright-report:/playwright-report -v $(pwd)/test-results:/test-results coffemug-qa-test:latest pnpm dotenvx run -f .env.ci -- npx playwright test
+        run: docker run --rm -e DOTENV_PRIVATE_KEY_CI="${DOTENV_PRIVATE_KEY_CI}" -v $(pwd)/playwright-report:/playwright-report -v $(pwd)/test-results:/test-results coffemug-qa-test:latest pnpm dotenvx run -f .env.ci -- npx playwright test
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
