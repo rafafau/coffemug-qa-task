@@ -34,29 +34,23 @@ jobs:
     needs: build
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Run ESLint in Docker
-        run: docker run --rm -v $(pwd):/app coffemug-qa-test:latest pnpm lint
+        run: docker run --rm coffemug-qa-test:latest pnpm lint
 
       - name: Run Prettier check in Docker
-        run: docker run --rm -v $(pwd):/app coffemug-qa-test:latest pnpm format:check
+        run: docker run --rm coffemug-qa-test:latest pnpm format:check
 
+  test:
+    runs-on: self-hosted
+    timeout-minutes: 30
   test:
     runs-on: self-hosted
     timeout-minutes: 30
     needs: lint
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Run Playwright tests in Docker
-        run: docker run --rm -v $(pwd):/app -v $(pwd)/playwright-report:/app/playwright-report -v $(pwd)/test-results:/app/test-results coffemug-qa-test:latest pnpm dotenvx run -f .env.ci -- npx playwright test
-        env:
-          CI: true
-
+        run: docker run --rm -v $(pwd)/playwright-report:/playwright-report -v $(pwd)/test-results:/test-results coffemug-qa-test:latest pnpm dotenvx run -f .env.ci -- npx playwright test
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
