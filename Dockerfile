@@ -12,5 +12,4 @@ COPY . .
 
 RUN pnpm npx playwright install --with-deps chromium 
 
-# Command to run tests
 CMD ["pnpm", "npx", "playwright", "test"]
