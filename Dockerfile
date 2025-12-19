@@ -1,23 +1,18 @@
-# Use Node.js LTS version with Playwright dependencies
-FROM mcr.microsoft.com/playwright:v1.57.0-noble
+FROM node:24-bookworm-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    npm install -g pnpm@10.26.1 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy project files
 COPY . .
 
-# Install Playwright browsers (already included in the base image, but ensuring)
-RUN pnpm exec playwright install --with-deps
+RUN pnpm npx playwright install --with-deps chromium 
 
 # Command to run tests
-CMD ["pnpm", "exec", "playwright", "test"]
+CMD ["pnpm", "npx", "playwright", "test"]

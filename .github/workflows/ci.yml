@@ -4,11 +4,7 @@ on:
   push:
     branches:
       - main
-      - poc-ecom-store
   pull_request:
-    branches:
-      - main
-      - poc-ecom-store
 
 jobs:
   build:
@@ -138,7 +134,7 @@ jobs:
         run: pnpm npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: pnpm dotenvx run -f .env.ci npx playwright test
+        run: pnpm dotenvx run -f .env.ci -- npx playwright test
         env:
           CI: true
 
