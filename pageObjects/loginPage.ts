@@ -1,6 +1,5 @@
 import { expect, type Page } from '@playwright/test';
 import * as dotenv from 'dotenv';
-dotenv.config();
 
 export class LoginPage {
   protected page: Page;
@@ -10,6 +9,9 @@ export class LoginPage {
   }
 
   async loginToPanel() {
+    if (!process.env.CI) {
+      dotenv.config();
+    }
     await expect(this.page.locator('#loginFrm')).toBeVisible();
     await this.page.locator('#loginFrm_loginname').fill(process.env.LOGIN!);
     await this.page.locator('#loginFrm_password').fill(process.env.PASSWORD!);
@@ -24,7 +26,7 @@ export class LoginPage {
     expect(response!.status()).toBe(302);
   }
 
-  async checkPassLogin() {
+  async checkUserIsLoggedIn() {
     await expect(this.page.locator('#maincontainer').getByText('Rafal')).toBeVisible();
     await this.page.reload();
     await this.page.waitForLoadState('domcontentloaded');

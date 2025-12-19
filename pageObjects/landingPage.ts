@@ -7,7 +7,7 @@ export class LandingPage {
     this.page = page;
   }
 
-  async goToLanding() {
+  async openLandingPage() {
     await this.page.goto('/');
     await this.page.waitForLoadState('domcontentloaded');
     await expect(this.page.getByTitle('Automation Test Store')).toBeVisible();
