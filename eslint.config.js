@@ -41,6 +41,7 @@ export default tseslint.config(
       ...playwright.configs['flat/recommended'].rules,
       'playwright/no-conditional-in-test': 'warn',
       'playwright/no-skipped-test': 'warn',
+      'playwright/expect-expect': 'off',
     },
   },
   prettier

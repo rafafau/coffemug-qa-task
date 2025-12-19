@@ -1,11 +1,13 @@
-import { expect, type Page } from '@playwright/test';
+import { expect, Locator, type Page } from '@playwright/test';
 import { Account } from '../dataObjects/account';
 
 export class RegisterPage {
   protected page: Page;
+  submitButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.submitButton = this.page.getByRole('button', { name: 'Continue' });
   }
 
   async registerNewAccount(account: Account) {
@@ -14,9 +16,15 @@ export class RegisterPage {
     await this.submitRegistrationForm();
   }
 
+  async registerNewAccountWithErrors(account: Account) {
+    await this.goToRegistrationForm();
+    await this.fillRegistrationForm(account);
+    await this.submitButton.click();
+  }
+
   protected async goToRegistrationForm() {
     await expect(this.page.locator('#accountFrm')).toBeVisible();
-    await this.page.getByRole('button', { name: 'Continue' }).click();
+    await this.submitButton.click();
     await expect(this.page.getByText('Your Personal Details')).toBeVisible();
   }
 
@@ -27,7 +35,9 @@ export class RegisterPage {
       if (field.type === 'textinput') {
         await locator.fill(field.value as string);
       } else if (field.type === 'select') {
-        await locator.selectOption({ label: field.label as string });
+        if (field.label) {
+          await locator.selectOption({ label: field.label as string });
+        }
       } else if (field.type === 'checkbox') {
         if (field.value) {
           await locator.check();
@@ -36,11 +46,16 @@ export class RegisterPage {
     }
   }
 
+  async checkValidationError(errorMessage: string) {
+    await expect(this.page.locator('div.has-error input').first()).toBeVisible();
+    await expect(this.page.locator('.help-block', { hasText: errorMessage })).toBeVisible();
+  }
+
   protected async submitRegistrationForm() {
     const requestPromise = this.page.waitForRequest(
       'https://automationteststore.com/index.php?rt=account/create'
     );
-    await this.page.getByRole('button', { name: 'Continue' }).click();
+    await this.submitButton.click();
     const request = await requestPromise;
     const response = await request.response();
     expect(response).not.toBeNull();
