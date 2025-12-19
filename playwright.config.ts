@@ -36,8 +36,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], 
-      baseURL: 'https://automationteststore.com/'},
+      use: { ...devices['Desktop Chrome'], baseURL: 'https://automationteststore.com/' },
     },
 
     // {
