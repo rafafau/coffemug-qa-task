@@ -8,12 +8,12 @@ test.beforeEach(async ({ page }) => {
   await ecomm.landing().goToLanding();
 });
 
-test('Poprawne zarejestrowanie nowego uzytkownika', async () => {
+test('Poprawne zarejestrowanie nowego użytkownika', async () => {
   await ecomm.menu().goToLogin();
   await ecomm.register().registerNewAccount();
-  // await ecomm.login().checkPassLogin();
+  await ecomm.register().checkRegisteredAccount();
 });
 
 test.afterEach(async () => {
-  // await ecomm.menu().logoutUser();
+  await ecomm.menu().logoutUser();
 });
