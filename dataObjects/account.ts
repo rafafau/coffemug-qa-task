@@ -3,22 +3,22 @@ import { FormFieldInterface } from '../interfaces/FormFieldInterface';
 import { AccountDataInterface } from '../interfaces/AccountDataInterface';
 
 export class Account implements AccountDataInterface {
-  firstName: string;
-  lastName: string;
-  email: string;
-  telephone: string;
-  fax: string;
-  company: string;
-  address1: string;
-  address2: string;
-  city: string;
-  country: string;
-  zone: string;
-  postcode: string;
-  loginname: string;
-  password: string;
-  newsletter: boolean;
-  agree: boolean;
+  firstName!: string;
+  lastName!: string;
+  email!: string;
+  telephone!: string;
+  fax!: string;
+  company!: string;
+  address1!: string;
+  address2!: string;
+  city!: string;
+  country!: string;
+  zone!: string;
+  postcode!: string;
+  loginname!: string;
+  password!: string;
+  newsletter!: boolean;
+  agree!: boolean;
 
   constructor(customData?: Partial<AccountDataInterface>) {
     const defaultData: AccountDataInterface = {
@@ -40,24 +40,7 @@ export class Account implements AccountDataInterface {
       agree: true,
     };
 
-    const mergedData = { ...defaultData, ...customData };
-
-    this.firstName = mergedData.firstName;
-    this.lastName = mergedData.lastName;
-    this.email = mergedData.email;
-    this.telephone = mergedData.telephone;
-    this.fax = mergedData.fax;
-    this.company = mergedData.company;
-    this.address1 = mergedData.address1;
-    this.address2 = mergedData.address2;
-    this.city = mergedData.city;
-    this.country = mergedData.country;
-    this.zone = mergedData.zone;
-    this.postcode = mergedData.postcode;
-    this.loginname = mergedData.loginname;
-    this.password = mergedData.password;
-    this.newsletter = mergedData.newsletter;
-    this.agree = mergedData.agree;
+    Object.assign(this, { ...defaultData, ...customData });
   }
 
   get formFields(): FormFieldInterface[] {
@@ -94,9 +77,5 @@ export class Account implements AccountDataInterface {
       zone: this.zone,
       postcode: this.postcode,
     };
-  }
-
-  static create(customData?: Partial<AccountDataInterface>): Account {
-    return new Account(customData);
   }
 }

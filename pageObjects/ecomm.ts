@@ -4,6 +4,7 @@ import { LoginPage } from './loginPage';
 import { LandingPage } from './landingPage';
 import { RegisterPage } from './registerPage';
 import { AccountPage } from './accountPage';
+import { SearchPage } from './searchPage';
 
 export class Ecomm {
   private readonly page: Page;
@@ -12,6 +13,7 @@ export class Ecomm {
   private readonly LoginPage: LoginPage;
   private readonly RegisterPage: RegisterPage;
   private readonly AccountPage: AccountPage;
+  private readonly SearchPage: SearchPage;
 
   constructor(page: Page) {
     this.page = page;
@@ -20,6 +22,7 @@ export class Ecomm {
     this.LoginPage = new LoginPage(this.page);
     this.RegisterPage = new RegisterPage(this.page);
     this.AccountPage = new AccountPage(this.page);
+    this.SearchPage = new SearchPage(this.page);
   }
   landing() {
     return this.LandingPage;
@@ -35,5 +38,8 @@ export class Ecomm {
   }
   account() {
     return this.AccountPage;
+  }
+  search() {
+    return this.SearchPage;
   }
 }
