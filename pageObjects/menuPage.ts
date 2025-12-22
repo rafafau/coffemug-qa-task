@@ -3,10 +3,12 @@ import { expect, Locator, type Page } from '@playwright/test';
 export class MenuPage {
   protected page: Page;
   protected topNavMenu: Locator;
+  protected searchInput: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.topNavMenu = this.page.locator('#topnav');
+    this.searchInput = this.page.getByRole('textbox', { name: 'Search Keywords' });
   }
 
   async goToLogin() {
@@ -33,5 +35,11 @@ export class MenuPage {
       )
     ).toBeVisible();
     await this.page.close();
+  }
+
+  async performSearch(keyword: string) {
+    await this.searchInput.click();
+    await this.searchInput.fill(keyword);
+    await this.searchInput.press('Enter');
   }
 }
