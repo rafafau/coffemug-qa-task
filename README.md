@@ -1,140 +1,117 @@
-# coffemug-qa-task
+# E-commerce Website Testing - Automation Test Store
 
-## 🚀 Instalacja projektu
+Automated test suite for e-commerce flows using TypeScript and Playwright.
 
-### Wymagania
+## 📋 Overview
 
-- Node.js (wersja 18 lub wyższa)
-- pnpm (menedżer pakietów)
+This project implements automated tests for key e-commerce scenarios including:
 
-### Kroki instalacji
+- User registration with validation (18 test cases)
+- Login/logout with session persistence
+- Product discovery via search and category navigation
+- Shopping cart operations (add, modify, remove)
+- Coupon/discount validation
 
-1. **Zainstaluj zależności**
+**Test Site:** [Automation Test Store](https://automationteststore.com/)
 
-   ```bash
-   pnpm install
-   ```
+## 🔧 Prerequisites
 
-2. **Zainstaluj przeglądarki Playwright**
+- **Node.js** 22 or higher
+- **pnpm** package manager
 
-   ```bash
-   pnpm npx playwright install
-   ```
+## 🛠️ Technologies
 
-3. **Skonfiguruj zmienne środowiskowe**
+- **Test Framework:** Playwright
+- **Language:** TypeScript (strict mode)
+- **Test Data:** @faker-js/faker
+- **Architecture:** Page Object Model (POM)
+- **CI/CD:** GitHub Actions
+- **Containerization:** Docker
+- **Code Quality:** ESLint, Prettier, Husky
+- **Secrets Management:** dotenvx
 
-   ```bash
-   cp .env.ci .env
-   cp .env.dist .env.keys
-   ```
+## 🚀 Quick Start
 
-   > **Uwaga:** Plik `.env.keys` zawiera klucze szyfrowania. Musisz uzupełnić go poprawnym kluczem deszyfrującym, aby uruchomić aplikację lokalnie.
-
-   ```bash
-   pnpm dotenvx decrypt -f .env.ci
-   ```
-
-## 🧪 Uruchamianie testów
-
-### Uruchomienie wszystkich testów
+### 1. Install Dependencies
 
 ```bash
+pnpm install
+```
+
+### 2. Install Playwright Browsers
+
+```bash
+pnpm exec playwright install
+```
+
+### 3. Configure Environment Variables
+
+```bash
+# Copy environment files
+cp .env.ci .env
+cp .env.dist .env.keys
+```
+
+> **Note:** The `.env.keys` file contains encryption keys. You need to provide a valid decryption key to run tests locally.
+
+Decrypt environment variables:
+
+```bash
+pnpm dotenvx decrypt -f .env.ci
+```
+
+### 4. Run Tests
+
+```bash
+# Run all tests
 pnpm npx playwright test
-```
 
-### Uruchomienie testów w trybie UI
-
-```bash
+# Run with UI mode (recommended for development)
 pnpm npx playwright test --ui
-```
 
-### Uruchomienie testów w trybie headed (z widoczną przeglądarką)
-
-```bash
+# Run with visible browser
 pnpm npx playwright test --headed
-```
 
-### Uruchomienie konkretnego testu
-
-```bash
+# Run specific test file
 pnpm npx playwright test tests/testCorrectLogin.spec.ts
 ```
 
-## 🎨 Linting i formatowanie
-
-### ESLint
-
-#### Sprawdzenie kodu pod kątem błędów
+### Linting and Formatting
 
 ```bash
+# Check for linting errors
 pnpm lint
-```
 
-#### Automatyczne naprawienie błędów
-
-```bash
+# Fix linting errors automatically
 pnpm lint:fix
 ```
 
-### Prettier
-
-#### Sprawdzenie formatowania kodu
-
 ```bash
+# Check code formatting
 pnpm format:check
-```
 
-#### Automatyczne sformatowanie kodu
-
-```bash
+# Format code automatically
 pnpm format
 ```
 
+### Pre-commit Hooks
+
+The project uses Husky for pre-commit hooks that automatically:
+
+- Run ESLint on staged files
+- Format code with Prettier
+- Check TypeScript types
+
 ## 🐳 Docker
 
-### Budowanie obrazu Docker
+### Build Docker
 
 ```bash
 docker build -t coffemug-qa-test:latest .
 ```
 
-### Uruchomienie testów w kontenerze Docker
-
-```bash
-docker run --rm coffemug-qa-test:latest
-```
-
-### Uruchomienie z montowaniem lokalnych plików
+### Run tests in Docker
 
 ```bash
 docker run --rm -v $(pwd):/app coffemug-qa-test:latest
 ```
-
-## 🔄 CI/CD - GitHub Actions
-
-Projekt zawiera automatyczny pipeline CI/CD, który uruchamia się przy każdym pushu i pull requeście.
-
-### Pipeline wykonuje następujące kroki:
-
-1. **Checkout kodu** - pobiera kod z repozytorium
-2. **Budowanie obrazu Docker** - tworzy obraz Docker z cache'owaniem warstw
-3. **Instalacja zależności** - instaluje pnpm i zależności projektu
-4. **Linting** - uruchamia ESLint do sprawdzenia kodu
-5. **Formatowanie** - sprawdza formatowanie kodu przez Prettier
-6. **Instalacja przeglądarek** - instaluje przeglądarki Playwright
-7. **Uruchomienie testów** - wykonuje testy Playwright
-8. **Upload artefaktów** - zapisuje raporty z testów (dostępne przez 30 dni)
-
-### Konfiguracja
-
-Pipeline znajduje się w pliku `.github/workflows/ci.yml` i uruchamia się dla branchy:
-
-- `main`
-- `poc-ecom-store`
-
-### Dostęp do raportów
-
-Po zakończeniu pipeline'a, raporty testów są dostępne w zakładce "Actions" w GitHub:
-
-- `playwright-report` - HTML raport z testów
-- `test-results` - szczegółowe wyniki testów

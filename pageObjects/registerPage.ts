@@ -4,10 +4,18 @@ import { Account } from '../dataObjects/account';
 export class RegisterPage {
   protected page: Page;
   submitButton: Locator;
+  private accountForm: Locator;
+  private personalDetailsText: Locator;
+  private errorInput: Locator;
+  private helpBlock: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.submitButton = this.page.getByRole('button', { name: 'Continue' });
+    this.accountForm = this.page.locator('#accountFrm');
+    this.personalDetailsText = this.page.getByText('Your Personal Details');
+    this.errorInput = this.page.locator('div.has-error input');
+    this.helpBlock = this.page.locator('.help-block');
   }
 
   async registerNewAccount(account: Account) {
@@ -23,9 +31,9 @@ export class RegisterPage {
   }
 
   protected async goToRegistrationForm() {
-    await expect(this.page.locator('#accountFrm')).toBeVisible();
+    await expect(this.accountForm).toBeVisible();
     await this.submitButton.click();
-    await expect(this.page.getByText('Your Personal Details')).toBeVisible();
+    await expect(this.personalDetailsText).toBeVisible();
   }
 
   protected async fillRegistrationForm(account: Account) {
@@ -47,14 +55,12 @@ export class RegisterPage {
   }
 
   async checkValidationError(errorMessage: string) {
-    await expect(this.page.locator('div.has-error input').first()).toBeVisible();
-    await expect(this.page.locator('.help-block', { hasText: errorMessage })).toBeVisible();
+    await expect(this.errorInput.first()).toBeVisible();
+    await expect(this.helpBlock.filter({ hasText: errorMessage })).toBeVisible();
   }
 
   protected async submitRegistrationForm() {
-    const requestPromise = this.page.waitForRequest(
-      'https://automationteststore.com/index.php?rt=account/create'
-    );
+    const requestPromise = this.page.waitForRequest('/index.php?rt=account/create');
     await this.submitButton.click();
     const request = await requestPromise;
     const response = await request.response();

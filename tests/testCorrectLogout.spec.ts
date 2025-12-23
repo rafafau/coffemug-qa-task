@@ -6,12 +6,13 @@ let ecomm: Ecomm;
 test.beforeEach(async ({ page }) => {
   ecomm = new Ecomm(page);
   await ecomm.landing().openLandingPage();
+  await ecomm.menu().goToLogin();
 });
 
-test('Poprawne zalogowanie do sklepu', async () => {
-  await ecomm.menu().goToLogin();
+test('Poprawne wylogowanie ze sklepu', async () => {
   await ecomm.login().loginToPanel();
-  await ecomm.login().checkUserIsLoggedIn();
+  await ecomm.menu().logoutUser();
+  await ecomm.menu().checkUserIsLoggedOut();
 });
 
 test.afterEach(async ({ page }) => {

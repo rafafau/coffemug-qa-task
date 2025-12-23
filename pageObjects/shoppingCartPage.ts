@@ -1,18 +1,30 @@
-import { expect, type Page } from '@playwright/test';
+import { expect, Locator, type Page } from '@playwright/test';
 
 export class ShoppingCartPage {
   protected page: Page;
+  private totalsTable: Locator;
+  private cart: Locator;
+  private emptyCartMessage: Locator;
+  private cartUpdateButton: Locator;
+  private couponInput: Locator;
+  private applyCouponButton: Locator;
+  private errorAlert: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.totalsTable = this.page.locator('#totals_table');
+    this.cart = this.page.locator('#cart');
+    this.emptyCartMessage = this.page.getByText('Your shopping cart is empty!');
+    this.cartUpdateButton = this.page.locator('#cart_update');
+    this.couponInput = this.page.locator('#coupon_coupon');
+    this.applyCouponButton = this.page.getByTitle('Apply Coupon');
+    this.errorAlert = this.page.locator('.alert-danger');
   }
 
   async checkShoppingCartItems(expectedTotal: string, expectedProducts: string[]) {
-    await expect(this.page.locator('#totals_table')).toContainText(expectedTotal);
+    await expect(this.totalsTable).toContainText(expectedTotal);
     for (const productName of expectedProducts) {
-      await expect(
-        this.page.locator('#cart').getByRole('link', { name: productName })
-      ).toBeVisible();
+      await expect(this.cart.getByRole('link', { name: productName })).toBeVisible();
     }
   }
 
@@ -21,9 +33,7 @@ export class ShoppingCartPage {
       has: this.page.getByRole('link', { name: productName }),
     });
 
-    const requestPromise = this.page.waitForRequest(
-      'https://automationteststore.com/index.php?rt=r/checkout/cart/recalc_totals'
-    );
+    const requestPromise = this.page.waitForRequest('/index.php?rt=r/checkout/cart/recalc_totals');
     await productRow.locator('.fa-trash-o').click();
     const request = await requestPromise;
     const response = await request.response();
@@ -31,10 +41,10 @@ export class ShoppingCartPage {
   }
 
   async checkCartIsEmpty() {
-    await expect(this.page.getByText('Your shopping cart is empty!')).toBeVisible();
+    await expect(this.emptyCartMessage).toBeVisible();
     await this.page.reload();
     await this.page.waitForLoadState('domcontentloaded');
-    await expect(this.page.getByText('Your shopping cart is empty!')).toBeVisible();
+    await expect(this.emptyCartMessage).toBeVisible();
   }
 
   async modifyProductQuantity(productName: string, newQuantity: string) {
@@ -44,23 +54,21 @@ export class ShoppingCartPage {
 
     const quantityInput = productRow.locator('input[name^="quantity"]');
     await quantityInput.fill(newQuantity);
-    const requestPromise = this.page.waitForRequest(
-      'https://automationteststore.com/index.php?rt=r/checkout/cart/recalc_totals'
-    );
-    await this.page.locator('#cart_update').click();
+    const requestPromise = this.page.waitForRequest('/index.php?rt=r/checkout/cart/recalc_totals');
+    await this.cartUpdateButton.click();
     const request = await requestPromise;
     const response = await request.response();
     expect(response?.status()).toBe(200);
   }
   async applyCouponCode(couponCode: string) {
-    await this.page.locator('#coupon_coupon').fill(couponCode);
-    await this.page.getByTitle('Apply Coupon').click();
+    await this.couponInput.fill(couponCode);
+    await this.applyCouponButton.click();
     await this.page.waitForLoadState('domcontentloaded');
   }
 
   async verifyInvalidCouponMessage(expectedTotal: string, expectedProducts: string[]) {
     await expect(
-      this.page.locator('.alert-danger').filter({
+      this.errorAlert.filter({
         hasText: "Error: Coupon is either invalid, expired or reached it's usage limit!",
       })
     ).toBeVisible();

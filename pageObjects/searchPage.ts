@@ -10,6 +10,10 @@ export class SearchPage {
   categoryDropdown: Locator;
   productLink!: Locator;
 
+  private categoryMenu: Locator;
+  private productsHeading: Locator;
+  private noResultsMessage: Locator;
+
   constructor(page: Page) {
     this.page = page;
     this.searchButton = this.page.getByRole('button', { name: ' Search' });
@@ -18,6 +22,13 @@ export class SearchPage {
     });
     this.sortDropdown = this.page.locator('#sort');
     this.categoryDropdown = this.page.locator('#category_id');
+    this.categoryMenu = this.page.locator('#categorymenu');
+    this.productsHeading = this.page.getByRole('heading', {
+      name: 'Products meeting the search criteria',
+    });
+    this.noResultsMessage = this.page.getByText(
+      'There is no product that matches the search criteria.'
+    );
   }
 
   async setSortAndFilter(category: CategoryType, sortOption?: SortType) {
@@ -39,12 +50,8 @@ export class SearchPage {
   }
 
   async checkIsProductNonExistent() {
-    await expect(
-      this.page.getByRole('heading', { name: 'Products meeting the search criteria' })
-    ).toBeVisible();
-    await expect(
-      this.page.getByText('There is no product that matches the search criteria.')
-    ).toBeVisible();
+    await expect(this.productsHeading).toBeVisible();
+    await expect(this.noResultsMessage).toBeVisible();
   }
 
   async goToProductDetails(productName: string) {
@@ -53,8 +60,8 @@ export class SearchPage {
   }
 
   async goToCategoryMenu(menu: string, subMenu: string) {
-    await this.page.locator('#categorymenu').getByRole('link', { name: menu }).hover();
-    await this.page.locator('#categorymenu').getByRole('link', { name: subMenu }).click();
+    await this.categoryMenu.getByRole('link', { name: menu }).hover();
+    await this.categoryMenu.getByRole('link', { name: subMenu }).click();
   }
   async goToMenFragranceSets() {
     await this.goToCategoryMenu('Men', 'Fragrance Sets');
