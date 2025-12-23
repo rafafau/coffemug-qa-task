@@ -110,13 +110,29 @@ tests/           # Test specifications
 
 ## 🚫 Co świadomie nie zaimplementowano
 
-### Valid Coupon Code Testing
+### 1. Valid Coupon Code Testing
 
 **Decyzja:** Zaimplementowano tylko test **invalid coupon code** (`testInvalidCouponInCart.spec.ts`)
 
 **Uzasadnienie:**
 
-1. **Brak dostępu do valid coupon codes** - sklep testowy (automationteststore.com) nie udostępnia publicznie aktywnych kodów promocyjnych
+- **Brak dostępu do valid coupon codes** - sklep testowy (automationteststore.com) nie udostępnia publicznie aktywnych kodów promocyjnych
+
+### 2. Zewnętrzny rejestr obrazów Docker
+
+**Decyzja:** Obraz Docker pozostaje w ramach tego repozytorium zamiast być publikowany w Docker Hub lub prywatnym rejestrze
+
+**Uzasadnienie:**
+
+- **Demonstracja kompletnego rozwiązania** - wszystkie komponenty projektu są widoczne w jednym Pull Request
+- **Brak zależności zewnętrznych** - projekt jest self-contained i może być uruchomiony lokalnie bez dodatkowych kroków
+
+**Potencjalne ulepszenie w środowisku produkcyjnym:**
+
+- Publikacja obrazu w prywatnym rejestrze (np. AWS ECR, Google Container Registry, Docker Hub)
+- Współdzielenie obrazu między wieloma projektami testowymi
+- Wersjonowanie obrazu
+- Redukcja duplikacji - inne projekty mogłyby wykorzystywać ten sam obraz
 
 ---
 
