@@ -20,4 +20,11 @@ export class ProductDetailsPage {
     );
     await expect(this.page.getByTitle(expectedDetails.manufacturer)).toBeVisible();
   }
+
+  async addToCart(quantity: number = 1) {
+    await expect(this.page.getByRole('link', { name: 'Add to Cart' })).toBeVisible();
+    await this.page.locator('#product_quantity').fill(quantity.toString());
+    await this.page.getByRole('link', { name: 'Add to Cart' }).click();
+    await expect(this.page.locator('h1')).toHaveText('Shopping Cart');
+  }
 }

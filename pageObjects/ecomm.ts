@@ -6,6 +6,7 @@ import { RegisterPage } from './registerPage';
 import { AccountPage } from './accountPage';
 import { SearchPage } from './searchPage';
 import { ProductDetailsPage } from './productDetailsPage';
+import { ShoppingCartPage } from './shoppingCartPage';
 
 export class Ecomm {
   private readonly page: Page;
@@ -16,6 +17,7 @@ export class Ecomm {
   private readonly AccountPage: AccountPage;
   private readonly SearchPage: SearchPage;
   private readonly ProductDetailsPage: ProductDetailsPage;
+  private readonly ShoppingCartPage: ShoppingCartPage;
 
   constructor(page: Page) {
     this.page = page;
@@ -26,7 +28,9 @@ export class Ecomm {
     this.AccountPage = new AccountPage(this.page);
     this.SearchPage = new SearchPage(this.page);
     this.ProductDetailsPage = new ProductDetailsPage(this.page);
+    this.ShoppingCartPage = new ShoppingCartPage(this.page);
   }
+
   landing() {
     return this.LandingPage;
   }
@@ -47,5 +51,8 @@ export class Ecomm {
   }
   productDetails() {
     return this.ProductDetailsPage;
+  }
+  shoppingCart() {
+    return this.ShoppingCartPage;
   }
 }
