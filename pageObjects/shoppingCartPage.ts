@@ -27,7 +27,7 @@ export class ShoppingCartPage {
     await productRow.locator('.fa-trash-o').click();
     const request = await requestPromise;
     const response = await request.response();
-    expect(response!.status()).toBe(200);
+    expect(response?.status()).toBe(200);
   }
 
   async checkCartIsEmpty() {
@@ -50,6 +50,20 @@ export class ShoppingCartPage {
     await this.page.locator('#cart_update').click();
     const request = await requestPromise;
     const response = await request.response();
-    expect(response!.status()).toBe(200);
+    expect(response?.status()).toBe(200);
+  }
+  async applyCouponCode(couponCode: string) {
+    await this.page.locator('#coupon_coupon').fill(couponCode);
+    await this.page.getByTitle('Apply Coupon').click();
+    await this.page.waitForLoadState('domcontentloaded');
+  }
+
+  async verifyInvalidCouponMessage(expectedTotal: string, expectedProducts: string[]) {
+    await expect(
+      this.page.locator('.alert-danger').filter({
+        hasText: "Error: Coupon is either invalid, expired or reached it's usage limit!",
+      })
+    ).toBeVisible();
+    await this.checkShoppingCartItems(expectedTotal, expectedProducts);
   }
 }
