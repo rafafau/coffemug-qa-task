@@ -59,7 +59,7 @@ jobs:
         run: mkdir -p playwright-report test-results
 
       - name: Run Playwright tests in Docker
-        run: docker run --rm -e DOTENV_PRIVATE_KEY_CI="${DOTENV_PRIVATE_KEY_CI}" -v $(pwd)/playwright-report:/app/playwright-report -v $(pwd)/test-results:/app/test-results coffemug-qa-test:latest pnpm dotenvx run -f .env.ci -- npx playwright test
+        run: docker run --rm -e CI=true -e DOTENV_PRIVATE_KEY_CI="${DOTENV_PRIVATE_KEY_CI}" -v $(pwd)/playwright-report:/app/playwright-report -v $(pwd)/test-results:/app/test-results coffemug-qa-test:latest pnpm dotenvx run -f .env.ci -- npx playwright test
         env:
           DOTENV_PRIVATE_KEY_CI: ${{ secrets.DOTENV_PRIVATE_KEY_CI }}
 
