@@ -41,7 +41,7 @@ pnpm install
 ### 2. Install Playwright Browsers
 
 ```bash
-pnpm exec playwright install
+pnpm npx playwright install
 ```
 
 ### 3. Configure Environment Variables
@@ -57,7 +57,7 @@ cp .env.dist .env.keys
 Decrypt environment variables:
 
 ```bash
-pnpm dotenvx decrypt -f .env.ci
+pnpm dotenvx decrypt -f .env
 ```
 
 ### 4. Run Tests

@@ -7,7 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: 4,
   reporter: process.env.CI
-    ? [['list', ['junit', { outputFile: 'test-results/results.xml' }]]]
+    ? [['list'], ['junit', { outputFile: 'test-results/results.xml' }]]
     : [['html'], ['list']],
   use: {
     testIdAttribute: 'data-id',
