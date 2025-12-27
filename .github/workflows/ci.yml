@@ -17,6 +17,9 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      - name: Clean workspace
+        run: sudo rm -rf test-results || true
+
       - name: Checkout code
         uses: actions/checkout@v4
 
