@@ -17,9 +17,6 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Clean workspace
-        run: sudo rm -rf test-results || true
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -50,15 +47,13 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 10
     needs: build
-    container:
-      image: coffemug-qa-test:latest
 
     steps:
       - name: Run ESLint
-        run: pnpm lint
+        run: docker run --rm -v $(pwd):/app -w /app coffemug-qa-test:latest pnpm lint
 
       - name: Run Prettier check
-        run: pnpm format:check
+        run: docker run --rm -v $(pwd):/app -w /app coffemug-qa-test:latest pnpm format:check
 
   test:
     runs-on: self-hosted
@@ -67,12 +62,6 @@ jobs:
     environment: dev
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Create output directories
-        run: mkdir -p test-results
-
       - name: Run Playwright tests
         run: docker run --rm -e CI=true -e DOTENV_PRIVATE_KEY_CI="${DOTENV_PRIVATE_KEY_CI}" -v $(pwd)/test-results:/app/test-results coffemug-qa-test:latest pnpm dotenvx run -f .env.ci -- npx playwright test
         env:
