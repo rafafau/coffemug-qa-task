@@ -50,10 +50,10 @@ jobs:
 
     steps:
       - name: Run ESLint
-        run: docker run --rm -v $(pwd):/app -w /app coffemug-qa-test:latest pnpm lint
+        run: docker run --rm coffemug-qa-test:latest pnpm lint
 
       - name: Run Prettier check
-        run: docker run --rm -v $(pwd):/app -w /app coffemug-qa-test:latest pnpm format:check
+        run: docker run --rm coffemug-qa-test:latest pnpm format:check
 
   test:
     runs-on: self-hosted
