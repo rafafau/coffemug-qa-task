@@ -6,6 +6,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: '50%',
+  maxFailures: process.env.CI ? 5 : undefined,
   reporter: process.env.CI
     ? [['list'], ['junit', { outputFile: 'test-results/results.xml' }]]
     : [['html'], ['list']],
