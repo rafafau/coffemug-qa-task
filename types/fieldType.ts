@@ -1,1 +1,1 @@
-export type FieldType = 'textinput' | 'select' | 'checkbox';
+export type FieldType = 'textInput' | 'select' | 'checkbox';

@@ -1,27 +1,16 @@
 import { ProductCardInterface } from '../interfaces/ProductCardInterface';
 
 export class productCard implements ProductCardInterface {
-  productName!: string;
-  price!: string;
-  model!: string;
-  manufacturer!: string;
+  productName: string = 'MAN Eau de Toilette Spray';
+  price: string = '$37.50';
+  model: string = 'CK0010';
+  manufacturer: string = 'Calvin Klein';
 
   constructor(customData?: Partial<ProductCardInterface>) {
-    const defaultData: ProductCardInterface = {
-      productName: 'MAN Eau de Toilette Spray',
-      price: '$37.50',
-      model: 'CK0010',
-      manufacturer: 'Calvin Klein',
-    };
-
-    Object.assign(this, { ...defaultData, ...customData });
+    if (customData) Object.assign(this, customData);
   }
-  get productDetails() {
-    return {
-      productName: this.productName,
-      price: this.price,
-      model: this.model,
-      manufacturer: this.manufacturer,
-    };
+  get productDetails(): ProductCardInterface {
+    const { productName, price, model, manufacturer } = this;
+    return { productName, price, model, manufacturer };
   }
 }

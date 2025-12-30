@@ -40,7 +40,7 @@ export class RegisterPage {
     for (const field of account.formFields) {
       const locator = this.page.locator(field.locator);
 
-      if (field.type === 'textinput') {
+      if (field.type === 'textInput') {
         await locator.fill(field.value as string);
       } else if (field.type === 'select') {
         if (field.label) {
